@@ -1,0 +1,68 @@
+{
+  "interactionModel": {
+      "languageModel": {
+          "invocationName": "movie recommender",
+          "intents": [
+              {
+                  "name": "AMAZON.CancelIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.HelpIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.StopIntent",
+                  "samples": []
+              },
+              {
+                  "name": "AMAZON.NavigateHomeIntent",
+                  "samples": []
+              },
+              {
+                  "name": "GenreIntentHandler",
+                  "slots": [
+                      {
+                          "name": "genre",
+                          "type": "AMAZON.Genre"
+                      }
+                  ],
+                  "samples": [
+                      "I would like to watch a movie from {genre}",
+                      "{genre}"
+                  ]
+              },
+              {
+                  "name": "AMAZON.YesIntent",
+                  "samples": [
+                      "yup",
+                      "yep",
+                      "yeah",
+                      "yes"
+                  ]
+              },
+              {
+                  "name": "AMAZON.NoIntent",
+                  "samples": [
+                      "nope",
+                      "nah",
+                      "no"
+                  ]
+              },
+              {
+                  "name": "AgeIntentHandler",
+                  "slots": [
+                      {
+                          "name": "age",
+                          "type": "AMAZON.NUMBER"
+                      }
+                  ],
+                  "samples": [
+                      " {age}"
+                  ]
+              }
+          ],
+          "types": []
+      }
+  }
+}
