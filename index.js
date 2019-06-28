@@ -8,19 +8,19 @@ const API_KEY = 'a117f5890e839aba52bb9bf5a8bc7aba';
 
 
 const genre_code = {
-  'Action': 28,
-  'Adventure': 12,
-  'Animation': 16,
-  'Comedy': 35,
-  'Crime': 80,
-  'Documentary': 99,
-  'Drama': 18,
-  'Family': 10751,
-  'Fantasy': 14,
-  'Horror': 27,
-  'Thriller': 53,
-  'War': 10752,
-  'History': 14,
+  'action': 28,
+  'adventure': 12,
+  'animation': 16,
+  'comedy': 35,
+  'crime': 80,
+  'documentary': 99,
+  'drama': 18,
+  'family': 10751,
+  'fantasy': 14,
+  'horror': 27,
+  'thriller': 53,
+  'war': 10752,
+  'history': 14,
 
 };
 
@@ -92,57 +92,65 @@ const AgeIntentHandler = {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'AgeIntent';
   },
-async handle(handlerInput)
+handle(handlerInput)
 {
   let age = handlerInput.requestEnvelope.request.intent.slots['age'].value;
   const sessionAttributes1 = handlerInput.attributesManager.getSessionAttributes();
   let genre = sessionAttributes1.genre;
   genre = genre_code[genre];
-  let speechText = '';
-  if(age<18)
+  var speechText = 'hi';
+  let k = '';
+  if (age < 18)
   {
-  await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genre}`)
-  .then((response) => {
-    const data = JSON.parse(response);
-    let result = data['results'];
-    for(let i = 0;i<result.length;i++)
+    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genre}`)
+.then(function (response){
+    let len = response['data']['results'].length;
+    let result = response['data']['results'];
+    //let speechText = '';
+    for(let  i = 0 ;i<5;i++)
     {
-      speechText += result['original_title'];
+        speechText = speechText + result[i]['title'] + '\n';
     }
-  })
-  .catch((err)=>{
-    console.log(err);
-
-  });
+    //console.log(speechText);
+  return handlerInput.responseBuilder
+  .speak(speechText)
+  .reprompt('More recommendations?')
+  .getResponse();
+})
+.catch(function (error){
+    console.log(error);
+});
 
   }
+
   else
   {
-    {
-      await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genre}`)
-      .then((response) => {
-        const data = JSON.parse(response);
-        let result = data['results'];
-        console.log(result);
-        for(let i = 0;i<result.length;i++)
-        {
-          speechText += result['original_title'];
-        }
-      })
-      .catch((err) =>{
-        console.log(err);
-
-      });
+    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genre}`)
+.then(function (response){
+    let len = response['data']['results'].length;
+    let result = response['data']['results'];
     
-      }
-  }
+    for(let  i = 0 ;i<5;i++)
+    {
+        speechText = speechText + result[i]['title'] + '\n';
+    }
+    console.log(speechText);
   return handlerInput.responseBuilder
-   .speak(speechText)
-   .reprompt(speechText)
-   .getResponse();
-  
+  .speak(speechText)
+  .reprompt('More recommendations?')
+  .getResponse();
+})
+.catch(function (error){
+    console.log(error);
+});
+//console.log(k);
 
-}  
+  }
+  
+  
+  }
+
+  
 
 };
 
