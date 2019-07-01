@@ -92,17 +92,17 @@ const AgeIntentHandler = {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
       && handlerInput.requestEnvelope.request.intent.name === 'AgeIntent';
   },
-handle(handlerInput)
+async handle(handlerInput)
 {
   let age = handlerInput.requestEnvelope.request.intent.slots['age'].value;
   const sessionAttributes1 = handlerInput.attributesManager.getSessionAttributes();
   let genre = sessionAttributes1.genre;
-  genre = genre_code[genre];
-  var speechText = 'hi';
+  genreCode = genre_code[genre];
+  var speechText = `Here are your movie recommendations `;
   let k = '';
   if (age < 18)
   {
-    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genre}`)
+    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreCode}`)
 .then(function (response){
     let len = response['data']['results'].length;
     let result = response['data']['results'];
@@ -111,11 +111,8 @@ handle(handlerInput)
     {
         speechText = speechText + result[i]['title'] + '\n';
     }
-    //console.log(speechText);
-  return handlerInput.responseBuilder
-  .speak(speechText)
-  .reprompt('More recommendations?')
-  .getResponse();
+    console.log(speechText);
+
 })
 .catch(function (error){
     console.log(error);
@@ -125,7 +122,7 @@ handle(handlerInput)
 
   else
   {
-    axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genre}`)
+    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genreCode}`)
 .then(function (response){
     let len = response['data']['results'].length;
     let result = response['data']['results'];
@@ -135,10 +132,6 @@ handle(handlerInput)
         speechText = speechText + result[i]['title'] + '\n';
     }
     console.log(speechText);
-  return handlerInput.responseBuilder
-  .speak(speechText)
-  .reprompt('More recommendations?')
-  .getResponse();
 })
 .catch(function (error){
     console.log(error);
@@ -146,6 +139,10 @@ handle(handlerInput)
 //console.log(k);
 
   }
+  return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .getResponse(); 
   
   
   }
