@@ -51,8 +51,8 @@ const LaunchRequestHandler = {
         }
         else
         {
-          speechText = 'What kind of movie would you like to watch Action, Thriller or in the mood for some comedy? ';
-          console.log('okkkkk');
+          speechText = 'What kind of movie would you like to watch, Action, Thriller or in the mood for some comedy? ';
+          //console.log('okkkkk');
         }
     })
     .catch(err => {
@@ -77,7 +77,7 @@ const GenreIntentHandler = {
    const sessionAttributes1 = handlerInput.attributesManager.getSessionAttributes();
    const {genre} = sessionAttributes1;
    sessionAttributes1.genre = genreslot;
-   let speechText = `Alright! I will look something for you in ${genreslot}. Can I know the age demographics of the people you are watching the movie please?`
+   let speechText = `Alright! I will look something for you in ${genreslot}. Can I know the age demographics of the people you are watching the movie with please?`
    handlerInput.attributesManager.setSessionAttributes(sessionAttributes1);
    return handlerInput.responseBuilder
    .speak(speechText)
@@ -98,7 +98,7 @@ async handle(handlerInput)
   const sessionAttributes1 = handlerInput.attributesManager.getSessionAttributes();
   let genre = sessionAttributes1.genre;
   genreCode = genre_code[genre];
-  var speechText = `Here are your movie recommendations `;
+  var speechText = `Here are your movie recommendations: `;
   let k = '';
   if (age < 18)
   {
@@ -109,7 +109,7 @@ async handle(handlerInput)
     //let speechText = '';
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + '\n';
+        speechText = speechText + result[i]['title'] + ',' + '\n';
     }
     console.log(speechText);
 
@@ -129,7 +129,7 @@ async handle(handlerInput)
     
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + '\n';
+        speechText = speechText + result[i]['title'] + ',' + '\n';
     }
     console.log(speechText);
 })
@@ -163,7 +163,7 @@ const HelpIntentHandler = {
     return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard('Movie Recommender', speechText)
       .getResponse();
   },
 };
@@ -179,7 +179,7 @@ const CancelAndStopIntentHandler = {
 
     return handlerInput.responseBuilder
       .speak(speechText)
-      .withSimpleCard('Hello World', speechText)
+      .withSimpleCard('Movie Recommender', speechText)
       .getResponse();
   },
 };
@@ -222,3 +222,4 @@ exports.handler = skillBuilder
   )
   .addErrorHandlers(ErrorHandler)
   .lambda();
+    
