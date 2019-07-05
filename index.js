@@ -109,7 +109,7 @@ async handle(handlerInput)
     //let speechText = '';
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + ',' + '\n';
+        speechText = speechText + result[i]['title'] + '.' + '\n';
     }
     console.log(speechText);
 
@@ -129,7 +129,7 @@ async handle(handlerInput)
     
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + ',' + '\n';
+        speechText = speechText + result[i]['title'] + '.' + '\n';
     }
     console.log(speechText);
 })
@@ -222,4 +222,3 @@ exports.handler = skillBuilder
   )
   .addErrorHandlers(ErrorHandler)
   .lambda();
-    
