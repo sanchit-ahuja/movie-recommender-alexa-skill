@@ -1,27 +1,28 @@
-/* eslint-disable  func-names */
-/* eslint-disable  no-console */
-
 const Alexa = require('ask-sdk-core');
 const moment = require('moment-timezone');
 const axios = require('axios');
-const API_KEY = 'a117f5890e839aba52bb9bf5a8bc7aba';
+const API_KEY = 'f033262561b7ca5f4c7886f4021c543e';
 
 
 const genre_code = {
-  'action': 28,
-  'adventure': 12,
-  'animation': 16,
-  'comedy': 35,
-  'crime': 80,
-  'documentary': 99,
-  'drama': 18,
-  'family': 10751,
-  'fantasy': 14,
-  'horror': 27,
-  'thriller': 53,
-  'war': 10752,
-  'history': 14,
-
+  ' 28' :'action',
+  ' 12' :'adventure',
+   '16' :'animation',
+   '35':'comedy',
+   '80':'crime',
+  ' 99':'documentary',
+  ' 18':'drama',
+   '10751':'family',
+  '14':'fantasy',
+  '27':'horror',
+  '53':'thriller',
+  '10752':'war' ,
+  '36':'history',
+  '10402':'music',
+  '9648':'mystery',
+  '10749':'romance',
+  '37':'western',
+  '878':'science-fiction',
 };
 
 
@@ -40,7 +41,7 @@ const LaunchRequestHandler = {
     })
     .then((response) => {
         let timeobject = new moment();
-        let time = timeobject.tz(response.data).format('hh');
+        let time= timeobject.tz(response.data).format('hh');
         time = String(time);
         //console.log(time);
         time = Number(time);
@@ -74,10 +75,16 @@ const GenreIntentHandler = {
   handle(handlerInput)
   {
    let genreslot = handlerInput.requestEnvelope.request.intent.slots['genre'].value;
+   let genre_id=handlerInput.requestEnvelope.request.intent.slots.genre.resolutions.resolutionsPerAuthority[0].values[0].value.id ;
+ 
    const sessionAttributes1 = handlerInput.attributesManager.getSessionAttributes();
-   const {genre} = sessionAttributes1;
+   //const {genre} = sessionAttributes1;
    sessionAttributes1.genre = genreslot;
-   let speechText = `Alright! I will look something for you in ${genreslot}. Can I know the age demographics of the people you are watching the movie with please?`
+   handlerInput.attributesManager.setSessionAttributes(sessionAttributes1);
+   sessionAttributes1.genreid=genre_id;
+   
+   let genre = genre_code[genre_id];
+   let speechText = `Alright! I will find the best movies for you in ${genre} genre. Please ,Can I know the age demographics of the people you are watching the movie with?`
    handlerInput.attributesManager.setSessionAttributes(sessionAttributes1);
    return handlerInput.responseBuilder
    .speak(speechText)
@@ -96,20 +103,42 @@ async handle(handlerInput)
 {
   let age = handlerInput.requestEnvelope.request.intent.slots['age'].value;
   const sessionAttributes1 = handlerInput.attributesManager.getSessionAttributes();
-  let genre = sessionAttributes1.genre;
-  genreCode = genre_code[genre];
+ // let genre = sessionAttributes1.genre;
+  let genreid=sessionAttributes1.genreid;
+  let genre = genre_code[genreid];
   var speechText = `Here are your movie recommendations: `;
   let k = '';
-  if (age < 18)
+
+  if(genreid==0)
+  { 
+    speechText='Here are the popular movies which you may like to watch . ';
+    await axios.get(`https://api.themoviedb.org/3/movie/popular?page=1&language=en-US&api_key=${API_KEY}`)
+    .then(function(response)
+    {
+        let len=response['data']['results'].length;
+        let result=response['data']['results'];
+        for(let i=0;i<5;i++)
+        {
+          speechText += result[i]['title'] + ' ! '+ '\n\n';
+        } 
+        
+    })
+    .catch(function(error){
+      console.log(error);
+    });
+  }
+
+
+ else if (age < 18)
   {
-    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreCode}`)
+    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreid}`)
 .then(function (response){
     let len = response['data']['results'].length;
     let result = response['data']['results'];
     //let speechText = '';
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + ',' + '\n';
+        speechText = speechText + result[i]['title'] + ' ! ' + '\n\n';
     }
     console.log(speechText);
 
@@ -122,14 +151,14 @@ async handle(handlerInput)
 
   else
   {
-    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genreCode}`)
+    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genreid}`)
 .then(function (response){
     let len = response['data']['results'].length;
     let result = response['data']['results'];
     
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + ',' + '\n';
+        speechText = speechText + result[i]['title'] + ' ! ' + '\n\n';
     }
     console.log(speechText);
 })
@@ -139,6 +168,7 @@ async handle(handlerInput)
 //console.log(k);
 
   }
+  speechText += ' Please Enjoy!!';
   return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
@@ -221,5 +251,4 @@ exports.handler = skillBuilder
     SessionEndedRequestHandler
   )
   .addErrorHandlers(ErrorHandler)
-  .lambda();
-    
+.lambda();
