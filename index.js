@@ -25,7 +25,8 @@ const genre_code = {
   '878':'science-fiction',
 };
 
-
+let flag1 = 0;
+let flag2 = 0;
 
 
 const LaunchRequestHandler = {
@@ -49,6 +50,8 @@ const LaunchRequestHandler = {
        
         {
           speechText = 'Would you like to see some Horror movies right now? ';
+          flag1 = 1;
+          flag2 = 1;
         }
         else
         {
@@ -74,6 +77,7 @@ const GenreIntentHandler = {
   },
   handle(handlerInput)
   {
+  flag2 = 1;
    let genreslot = handlerInput.requestEnvelope.request.intent.slots['genre'].value;
    let genre_id=handlerInput.requestEnvelope.request.intent.slots.genre.resolutions.resolutionsPerAuthority[0].values[0].value.id ;
  
@@ -109,7 +113,7 @@ async handle(handlerInput)
   var speechText = `Here are your movie recommendations: `;
   let k = '';
 
-  if(genreid==0)
+  if(genreid == 0)
   { 
     speechText='Here are the popular movies which you may like to watch . ';
     await axios.get(`https://api.themoviedb.org/3/movie/popular?page=1&language=en-US&api_key=${API_KEY}`)
@@ -119,7 +123,7 @@ async handle(handlerInput)
         let result=response['data']['results'];
         for(let i=0;i<5;i++)
         {
-          speechText += result[i]['title'] + ' ! '+ '\n\n';
+          speechText += result[i]['title'] + ' . '+ '\n\n';
         } 
         
     })
@@ -138,7 +142,7 @@ async handle(handlerInput)
     //let speechText = '';
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + '.' + '\n';
+        speechText = speechText + result[i]['title'] + ' . ' + '\n';
     }
     console.log(speechText);
 
@@ -158,7 +162,7 @@ async handle(handlerInput)
     
     for(let  i = 0 ;i<5;i++)
     {
-        speechText = speechText + result[i]['title'] + '.' + '\n';
+        speechText = speechText + result[i]['title'] + ' . ' + '\n';
     }
     console.log(speechText);
 })
@@ -168,7 +172,8 @@ async handle(handlerInput)
 //console.log(k);
 
   }
-  speechText += ' Please Enjoy!!';
+  speechText += ' ';
+  speechText += 'Would you like to go for another recommendation in another Genre?';
   return handlerInput.responseBuilder
       .speak(speechText)
       .reprompt(speechText)
@@ -180,7 +185,99 @@ async handle(handlerInput)
   
 
 };
+const YesIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.YesIntent';
+    },
+    async handle(handlerInput){
+    if(flag1 == 1 && flag2 == 0)
+    {
+      let speechText = 'Alright! Here are your recommendations for your horror movie night: ';
+      await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=27`)
+  .then(function (response){
+      let len = response['data']['results'].length;
+      let result = response['data']['results'];
+      
+      for(let  i = 0 ;i<5;i++)
+      {
+          speechText = speechText + result[i]['title'] + ' . ' + '\n';
+      }
+      console.log(speechText);
+  })
+  .catch(function (error){
+      console.log(error);
+  });
+  flag1 = 0;
+    }
+    else if(flag1 == 0 && flag2 == 1){
+      speechText = 'Alright. What kind of movie would you like to watch then? Some documentary, mystery or some family movie? '
+      flag2 = 0;
+    }
+    else if(flag1 == 0 && flag2 == 0)
+    {
+      speechText = 'I did not get what you are trying to say.';
+    }
+    else
+    {
+      speechText = 'Alright. What kind movie would you like to watch then? Some documentary then or some family movie? '      
+    }
+  return handlerInput.responseBuilder
+  .speak(speechText)
+  .reprompt(speechText)
+  .getResponse();
+  
 
+    }
+    
+};
+
+const NoIntentHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.NoIntent';
+  },
+  
+  handle(handlerInput){
+    let speechText = '';
+    if(flag1 == 1 && flag2 == 0)
+    {
+      speechText = 'Alright then. What kind of movie would you like to watch then? Action, Romance or some Comedy? ';
+      flag1 = 0;
+    }
+    else if((flag1 == 0 && flag2 == 1) || (flag1 == 1 && flag2 == 1))
+    {
+        speechText = 'Alright. Have fun watching!'
+    }
+    else if(flag1 == 0 && flag2 == 0)
+    {
+      speechText = 'I did not get what are you trying to say.'
+    }
+  return handlerInput.responseBuilder
+  .speak(speechText)
+  .reprompt(speechText)
+  .getResponse();
+
+  }
+
+};
+
+const FallBackHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+      && handlerInput.requestEnvelope.request.intent.name === 'AMAZON.FallBackIntent';
+  },
+  handle(handlerInput)
+  {
+    let speechText = 'I am sorry I can not help you with that. I can give you recommendations for movies to watch.';
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(speechText)
+      .withSimpleCard('Movie Recommender', speechText)
+      .getResponse();
+  }
+
+}
 
 const HelpIntentHandler = {
   canHandle(handlerInput) {
@@ -246,6 +343,9 @@ exports.handler = skillBuilder
     LaunchRequestHandler,
     GenreIntentHandler,
     AgeIntentHandler,
+    YesIntentHandler,
+    NoIntentHandler,
+    FallBackHandler,
     HelpIntentHandler,
     CancelAndStopIntentHandler,
     SessionEndedRequestHandler
