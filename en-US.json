@@ -67,6 +67,18 @@
                         "around {age}  ",
                         "near to {age}   "
                     ]
+                },
+                {
+                    "name": "AMAZON.FallbackIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.YesIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.NoIntent",
+                    "samples": []
                 }
             ],
             "types": [
@@ -221,7 +233,6 @@
                             "name": {
                                 "value": "romantic",
                                 "synonyms": [
-                                    "romance",
                                     "gooey"
                                 ]
                             }
@@ -250,7 +261,13 @@
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.1034290430738.1048200650141"
-                            }
+                            },
+                            "validations": [
+                                {
+                                    "type": "hasEntityResolutionMatch",
+                                    "prompt": "Slot.Validation.1044178324102.362545589134.613483686106"
+                                }
+                            ]
                         }
                     ]
                 }
@@ -268,6 +285,15 @@
                     {
                         "type": "PlainText",
                         "value": " what kind of movie would you like to watch"
+                    }
+                ]
+            },
+            {
+                "id": "Slot.Validation.1044178324102.362545589134.613483686106",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "I am sorry but I can only recommend movies in Action, Thriller, Comedy, Romance, Horror, Mystery and Crime."
                     }
                 ]
             }

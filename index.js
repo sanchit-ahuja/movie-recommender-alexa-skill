@@ -56,6 +56,7 @@ const LaunchRequestHandler = {
         else
         {
           speechText = 'What kind of movie would you like to watch, Action, Thriller or in the mood for some comedy? ';
+          flag2 = 1;
           //console.log('okkkkk');
         }
     })
@@ -77,7 +78,6 @@ const GenreIntentHandler = {
   },
   handle(handlerInput)
   {
-  flag2 = 1;
    let genreslot = handlerInput.requestEnvelope.request.intent.slots['genre'].value;
    let genre_id=handlerInput.requestEnvelope.request.intent.slots.genre.resolutions.resolutionsPerAuthority[0].values[0].value.id ;
  
@@ -211,8 +211,8 @@ const YesIntentHandler = {
   flag1 = 0;
     }
     else if(flag1 == 0 && flag2 == 1){
-      speechText = 'Alright. What kind of movie would you like to watch then? Some documentary, mystery or some family movie? '
-      flag2 = 0;
+        return LaunchRequestHandler.handle(handlerInput);
+        flag2 = 0;
     }
     else if(flag1 == 0 && flag2 == 0)
     {
@@ -220,7 +220,7 @@ const YesIntentHandler = {
     }
     else
     {
-      speechText = 'Alright. What kind movie would you like to watch then? Some documentary then or some family movie? '      
+      return LaunchRequestHandler.handler(handlerInput);
     }
   return handlerInput.responseBuilder
   .speak(speechText)
