@@ -25,6 +25,8 @@ const genre_code = {
   '878':'science-fiction',
 };
 
+const random_movie = ['popularity.desc','revenue.desc','vote_average.desc','vote_count.desc']
+
 let flag1 = 0;
 let flag2 = 0;
 
@@ -112,6 +114,7 @@ async handle(handlerInput)
   let genre = genre_code[genreid];
   var speechText = `Here are your movie recommendations: `;
   let k = '';
+  let random_choice = random_movie[Math.floor(Math.random()*random_movie.length)];
 
   if(genreid == 0)
   { 
@@ -135,7 +138,7 @@ async handle(handlerInput)
 
  else if (age < 18)
   {
-    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=false&include_video=false&page=1&with_genres=${genreid}`)
+    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=${random_choice}&include_adult=false&include_video=false&page=1&with_genres=${genreid}`)
 .then(function (response){
     let len = response['data']['results'].length;
     let result = response['data']['results'];
@@ -155,7 +158,7 @@ async handle(handlerInput)
 
   else
   {
-    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=popularity.desc&include_adult=true&include_video=false&page=1&with_genres=${genreid}`)
+    await axios.get(`https://api.themoviedb.org/3/discover/movie?api_key=${API_KEY}&language=en-US&sort_by=${random_choice}&include_adult=true&include_video=false&page=1&with_genres=${genreid}`)
 .then(function (response){
     let len = response['data']['results'].length;
     let result = response['data']['results'];
