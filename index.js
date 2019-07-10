@@ -214,8 +214,9 @@ const YesIntentHandler = {
   flag1 = 0;
     }
     else if(flag1 == 0 && flag2 == 1){
-        return LaunchRequestHandler.handle(handlerInput);
-        flag2 = 0;
+      flag2 = 0; 
+      return LaunchRequestHandler.handle(handlerInput);
+        
     }
     else if(flag1 == 0 && flag2 == 0)
     {
@@ -251,6 +252,7 @@ const NoIntentHandler = {
     else if((flag1 == 0 && flag2 == 1) || (flag1 == 1 && flag2 == 1))
     {
         speechText = 'Alright. Have fun watching!'
+        return SessionEndedRequestHandler.handle(handlerInput);
     }
     else if(flag1 == 0 && flag2 == 0)
     {
@@ -319,9 +321,12 @@ const SessionEndedRequestHandler = {
     return handlerInput.requestEnvelope.request.type === 'SessionEndedRequest';
   },
   handle(handlerInput) {
+    let speechText = 'Alright! Have fun watching!';
     console.log(`Session ended with reason: ${handlerInput.requestEnvelope.request.reason}`);
 
-    return handlerInput.responseBuilder.getResponse();
+    return handlerInput.responseBuilder
+    .speak(speechText)
+    .getResponse();
   },
 };
 
