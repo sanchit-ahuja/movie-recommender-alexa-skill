@@ -28,6 +28,88 @@
                         }
                     ],
                     "samples": [
+                        "please tell something in {genre}",
+                        "recommend something in {genre}",
+                        "suggest something in {genre} movies",
+                        "suggest something from {genre} movies",
+                        "suggest something in {genre}",
+                        "suggest something from {genre}",
+                        "need {genre}",
+                        "need {genre} please ",
+                        "in need to watch something in {genre}",
+                        "in mood for some {genre}",
+                        "exceptionally good in {genre}",
+                        "the very best in {genre}",
+                        "what about something very popular in {genre}",
+                        "tell me something very good in {genre}",
+                        "want to see anything in {genre} kind",
+                        "want to see anything  {genre}",
+                        "want to see anything in {genre}",
+                        "in the mood for something in {genre}",
+                        "in the mood for some {genre}",
+                        "your very best in {genre}",
+                        "best in {genre}",
+                        "everything good in {genre}",
+                        "something amazing in {genre}",
+                        "something good in {genre}",
+                        "something popular in {genre}",
+                        "any popular {genre}",
+                        "any top rated {genre}",
+                        "only {genre}",
+                        "everything thats {genre}",
+                        "everything that is good in {genre}",
+                        "anything that is {genre}",
+                        "in {genre} please",
+                        "how about something  {genre} like",
+                        "what about something good in {genre}",
+                        "how about anything in {genre}",
+                        "tell any in {genre}",
+                        "tell something in {genre}",
+                        "tell in {genre}",
+                        "everything that is {genre}",
+                        "anything in {genre}",
+                        "suggest somehting in {genre}",
+                        "please suggest somehting in {genre}",
+                        "how about something in {genre}",
+                        "how about  something {genre}",
+                        "I want movies in {genre}",
+                        "I like movies from the {genre}",
+                        "i want {genre}",
+                        "i will enjoy {genre} surely",
+                        "i am fond of {genre}",
+                        "I would love anything in {genre}",
+                        "i would enjoy {genre}",
+                        "i would love something in {genre}",
+                        "I would love some movies in  {genre}",
+                        "I would love some {genre}",
+                        "I love to watch {genre} movies",
+                        "I love to watch {genre} ",
+                        "I love {genre}",
+                        "lets try some {genre}  movie",
+                        "lets try some {genre} movies",
+                        "lets try some {genre}",
+                        "lets see some  {genre} movie",
+                        "lets see some {genre}",
+                        "lets see some in {genre}",
+                        "I will go with  {genre}",
+                        "I will go with anything in {genre}",
+                        "I prefer {genre}",
+                        "I am in the mood of {genre}",
+                        "i want some {genre}",
+                        "please something like {genre}",
+                        "give me something in {genre}",
+                        "want something in {genre}",
+                        "show {genre}",
+                        "lets see {genre}",
+                        "in {genre}",
+                        "something  in {genre} ",
+                        "please {genre}",
+                        "want to see {genre}",
+                        "want {genre}",
+                        "how about {genre}",
+                        "how about something {genre}",
+                        "want to watch {genre}",
+                        "something {genre} like",
                         "{genre} please",
                         "some {genre}",
                         "suggest {genre} movies",
@@ -69,10 +151,6 @@
                     ]
                 },
                 {
-                    "name": "AMAZON.FallbackIntent",
-                    "samples": []
-                },
-                {
                     "name": "AMAZON.YesIntent",
                     "samples": []
                 },
@@ -88,19 +166,29 @@
                         {
                             "id": "37",
                             "name": {
-                                "value": "western"
+                                "value": "western",
+                                "synonyms": [
+                                    "cowboy"
+                                ]
                             }
                         },
                         {
                             "id": "10752",
                             "name": {
-                                "value": "war"
+                                "value": "war",
+                                "synonyms": [
+                                    "which changed lives "
+                                ]
                             }
                         },
                         {
                             "id": "9648",
                             "name": {
-                                "value": "mystery"
+                                "value": "mystery",
+                                "synonyms": [
+                                    "puzzling",
+                                    "puzzly"
+                                ]
                             }
                         },
                         {
@@ -108,6 +196,7 @@
                             "name": {
                                 "value": "music",
                                 "synonyms": [
+                                    "musical",
                                     "musically"
                                 ]
                             }
@@ -126,6 +215,7 @@
                             "name": {
                                 "value": "drama",
                                 "synonyms": [
+                                    "dramatic",
                                     "melodramatic"
                                 ]
                             }
@@ -163,8 +253,9 @@
                         {
                             "id": "878",
                             "name": {
-                                "value": "sci-fi",
+                                "value": "sci fi",
                                 "synonyms": [
+                                    "sci-fi",
                                     "science fiction",
                                     "cool"
                                 ]
@@ -186,7 +277,7 @@
                             "name": {
                                 "value": "animated",
                                 "synonyms": [
-                                    "kids like"
+                                    "children"
                                 ]
                             }
                         },
@@ -204,6 +295,9 @@
                             "name": {
                                 "value": "any",
                                 "synonyms": [
+                                    "your best",
+                                    "mix",
+                                    "anything",
                                     "most popular",
                                     "highest rated",
                                     "the best",
@@ -233,6 +327,7 @@
                             "name": {
                                 "value": "romantic",
                                 "synonyms": [
+                                    "romance",
                                     "gooey"
                                 ]
                             }
@@ -261,13 +356,7 @@
                             "elicitationRequired": true,
                             "prompts": {
                                 "elicitation": "Elicit.Slot.1034290430738.1048200650141"
-                            },
-                            "validations": [
-                                {
-                                    "type": "hasEntityResolutionMatch",
-                                    "prompt": "Slot.Validation.1044178324102.362545589134.613483686106"
-                                }
-                            ]
+                            }
                         }
                     ]
                 }
