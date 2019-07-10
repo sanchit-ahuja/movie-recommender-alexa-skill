@@ -90,7 +90,7 @@ const GenreIntentHandler = {
    sessionAttributes1.genreid=genre_id;
    
    let genre = genre_code[genre_id];
-   let speechText = `Can I know the age demographics of the people you are watching the movie with?`
+   let speechText = `Cool! I\'ll find something appropriate for you. Can I know the age demographics of the people you are watching the movie with?`
    handlerInput.attributesManager.setSessionAttributes(sessionAttributes1);
    return handlerInput.responseBuilder
    .speak(speechText)
